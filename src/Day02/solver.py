@@ -19,8 +19,6 @@ class FirstSolver:
             results[instruction] += param
         f.close()
 
-
-
         return results["forward"] * (results["down"] - results["up"])
 
 

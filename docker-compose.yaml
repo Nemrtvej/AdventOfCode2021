@@ -1,0 +1,9 @@
+version: "3.9"
+services:
+    python:
+        build:
+            dockerfile: docker/python/Dockerfile
+            context: .
+        volumes:
+        -   .:/opt/project
+        command: tail -f /dev/null

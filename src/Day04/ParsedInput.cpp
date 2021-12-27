@@ -15,6 +15,22 @@ void ParsedInput::addField(BingoField bingoField) {
     bingoFields.push_back(bingoField);
 }
 
+void ParsedInput::markNumber(int number) {
+    for (int i = 0; i < this->bingoFields.size(); i++) {
+        this->bingoFields[i].markNumber(number);
+    }
+}
+
+BingoField ParsedInput::getFieldWithBingo() {
+    for (int i = 0; i < this->bingoFields.size(); i++) {
+        if (this->bingoFields[i].hasBingo()) {
+            return this->bingoFields[i];
+        }
+    }
+
+    throw std::domain_error("No field with bingo found.");
+}
+
 ParsedInput::~ParsedInput() {
 }
 
@@ -31,4 +47,8 @@ void ParsedInput::dump() {
     for (int i = 0; i < this->bingoFields.size(); i++) {
         this->bingoFields[i].dump();
     }
+}
+
+vector<int> ParsedInput::getNumbers() {
+    return this->inputNumbers;
 }

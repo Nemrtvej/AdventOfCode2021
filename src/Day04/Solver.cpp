@@ -9,5 +9,22 @@
 #include <fstream>
 
 int Solver::solve(ParsedInput &parsedInput) {
-    return 0;
+    int result = 0;
+
+    for (int i = 0; i < parsedInput.getNumbers().size(); i++) {
+        int currentNumber = parsedInput.getNumbers()[i];
+        parsedInput.markNumber(currentNumber);
+
+        try {
+            BingoField winningField = parsedInput.getFieldWithBingo();
+            int sumOfUnmarked = winningField.getSumOfUnmarked();
+            result = sumOfUnmarked * currentNumber;
+            break;
+
+        } catch (std::domain_error& e) {
+            continue;
+        }
+    }
+
+    return result;
 }

@@ -6,18 +6,30 @@
 #define ADVENTOFCODE2021_BINGOFIELD_H
 
 
+#include <array>
+#include <vector>
+#include "BingoNumber.h"
+
 class BingoField {
     public:
-        BingoField(const BingoField &other);
-        BingoField(int size);
+        explicit BingoField(int size);
         BingoField copy();
         void setNumber(int rowIndex, int colIndex, int value);
         int getNumber(int rowIndex, int colIndex);
         void dump();
+        void markNumber(int number);
         ~BingoField();
-    private:
+        bool hasBingo();
+
+    int getSumOfUnmarked();
+
+private:
         int size;
-        int** values;
+        BingoNumber* values;
+        int getIndex(int rowIndex, int colIndex) const;
+        bool isMarked(int rowindex, int colIndex);
+        bool isBingoInColumn(int col);
+        bool isBingoInRow(int row);
 };
 
 

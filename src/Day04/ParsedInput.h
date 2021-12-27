@@ -17,6 +17,9 @@ class ParsedInput {
         void dump();
         void addNumber(int number);
         void addField(BingoField bingoField);
+        vector<int> getNumbers();
+        void markNumber(int number);
+        BingoField getFieldWithBingo();
     private:
         vector<int> inputNumbers;
         vector<BingoField> bingoFields;

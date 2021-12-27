@@ -49,8 +49,8 @@ ParsedInput Parser::parse(string &inputFile) {
 
     BingoField* bingoField;
     const int matrixSize = 5;
-    int currentRow;
-    int currentCol;
+    int currentRow = 0;
+    int currentCol = 0;
     vector<string> parsedNumbersInLine;
 
     while (true) {

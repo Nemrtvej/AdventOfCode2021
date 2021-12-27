@@ -4,26 +4,12 @@
 
 #include <iostream>
 #include "BingoField.h"
+#include "BingoNumber.h"
 
 BingoField::BingoField(int size) {
     this->size = size;
-    this->values = new int*[size];
-    for (int i = 0; i < size; i++) {
-        this->values[i] = new int[size];
-    }
+    this->values = new BingoNumber[size * size];
 }
-
-BingoField::BingoField(const BingoField &other) {
-    this->size = other.size;
-    this->values = new int*[size];
-    for (int rowIndex = 0; rowIndex < size; rowIndex++) {
-        this->values[rowIndex] = new int[size];
-        for (int colIndex = 0; colIndex < size; colIndex++) {
-            this->values[rowIndex][colIndex] = other.values[rowIndex][colIndex];
-        }
-    }
-}
-
 
 BingoField BingoField::copy() {
     BingoField result = BingoField(this->size);
@@ -38,18 +24,23 @@ BingoField BingoField::copy() {
 }
 
 void BingoField::setNumber(int rowIndex, int colIndex, int value) {
-    this->values[rowIndex][colIndex] = value;
+    this->values[this->getIndex(rowIndex, colIndex)] = BingoNumber(value);
+}
+
+bool BingoField::isMarked(int rowindex, int colIndex) {
+    return this->values[this->getIndex(rowindex, colIndex)].isMarked();
 }
 
 int BingoField::getNumber(int rowIndex, int colIndex) {
-    return this->values[rowIndex][colIndex];
+    return this->values[this->getIndex(rowIndex, colIndex)].getNumber();
+}
+
+int BingoField::getIndex(int rowIndex, int colIndex) const {
+    return (rowIndex * this->size) + colIndex;
 }
 
 BingoField::~BingoField() {
-    for (int i = 0; i < this->size; i++) {
-        delete [] this->values[i];
-    }
-    delete [] this->values;
+    // delete [] this->values;
 }
 
 void BingoField::dump() {
@@ -61,4 +52,55 @@ void BingoField::dump() {
         }
     }
     std::cout << std::endl;
+}
+
+void BingoField::markNumber(int number) {
+    for (int i = 0; i < this->size * this->size; i++) {
+        if (this->values[i].getNumber() == number) {
+            this->values[i].mark();
+        }
+    }
+}
+
+bool BingoField::hasBingo() {
+    bool result = false;
+
+    for (int rowIndex = 0; rowIndex < this->size; rowIndex++) {
+        result = result || this->isBingoInRow(rowIndex);
+    }
+
+    for (int colIndex = 0; colIndex < this->size; colIndex++) {
+        result = result || this->isBingoInColumn(colIndex);
+    }
+
+    return result;
+}
+
+bool BingoField::isBingoInRow(int row) {
+    bool result = true;
+    for (int columnIndex = 0; columnIndex < this->size; columnIndex++) {
+        result = result && this->isMarked(row, columnIndex);
+    }
+
+    return result;
+}
+
+bool BingoField::isBingoInColumn(int col) {
+    bool result = true;
+    for (int rowIndex = 0; rowIndex < this->size; rowIndex++) {
+        result = result && this->isMarked(rowIndex, col);
+    }
+
+    return result;
+}
+
+int BingoField::getSumOfUnmarked() {
+    int result = 0;
+    for (int i = 0; i < this->size * this->size; i++) {
+        if (!this->values[i].isMarked()) {
+            result = result + this->values[i].getNumber();
+        }
+    }
+
+    return result;
 }
